@@ -1,0 +1,26 @@
+{
+  "name": "ecs-js",
+  "version": "0.0.0",
+  "description": "ecs implementation for JS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mstagg/ecs-js.git"
+  },
+  "keywords": [
+    "ecs"
+  ],
+  "author": "Matthew Stagg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mstagg/ecs-js/issues"
+  },
+  "homepage": "https://github.com/mstagg/ecs-js#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
+}
