@@ -1,27 +1,72 @@
-class TEST {
-  val: number
-  constructor(val: number) {
-    this.val = val
+type Entity = number;
+
+abstract class Component {}
+
+class ECS {
+  nextEntity: number = 0;
+  entities = new Map<Function, Map<Entity, Component>>();
+
+  insertEntity(...components: Component[]) {
+    const entity = this.nextEntity++;
+    components.forEach((component) => {
+      let map = this.entities.get(component.constructor);
+      if(!map) {
+        map = new Map<Entity, Component>();
+        this.entities.set(component.constructor, map);
+      }
+      map.set(entity, component);
+    });
+  }
+
+  queryEntities(...components: Component[]) {
+    const [head, ...tail] = components;
+    let valids: number[] = [];
+    (this.entities.get(head.constructor) ?? []).forEach((value, key) => {
+      const all = tail.every(x => {
+        const map = this.entities.get(x.constructor);
+        if(map) {
+          return map.has(key);
+        }
+        return false;
+      })
+      if(all) {
+        valids.push(key);
+      }
+    })
+
+    return valids;
   }
 }
 
-class TEST2 {
-  val: number
-  constructor(val: number) {
-    this.val = val
-  }
+class Edible extends Component {
+  constructor() { super(); }
+}
+class Fruit extends Component {
+  constructor() { super(); }
+}
+class Vegetable extends Component {
+  constructor() { super(); }
+}
+class Fungi extends Component {
+  constructor() { super(); }
+}
+class Price extends Component {
+  price: number;
+  constructor(p: number) { super(); this.price = p; }
 }
 
-const map = new Map<Function, TEST>
+const myEcs = new ECS();
 
-const set = (t: TEST) => {
-  map.set(t.constructor, t)
-}
+myEcs.insertEntity(new Edible(), new Fruit(), new Price(2.5));
+myEcs.insertEntity(new Edible(), new Fruit(), new Price(2.5));
+myEcs.insertEntity(new Edible(), new Fruit());
+myEcs.insertEntity(new Edible(), new Vegetable(), new Price(4.0));
+myEcs.insertEntity(new Edible(), new Vegetable());
+myEcs.insertEntity(new Edible(), new Fungi());
+myEcs.insertEntity(new Fungi());
 
-const test = new TEST(5);
-const test2 = new TEST2(10);
-set(test)
-set(test2)
-
-console.log(map.get(TEST))
-console.log(map.get(TEST2))
+console.log(myEcs.entities)
+console.log(myEcs.queryEntities(new Edible()));
+console.log(myEcs.queryEntities(new Edible(), new Vegetable()));
+//@ts-ignore
+console.log(myEcs.queryEntities(new Edible(), new Vegetable(), new Price()));
