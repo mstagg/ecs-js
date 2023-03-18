@@ -1,0 +1,1 @@
+export type EntityTree<T> = Map<Function, T>
