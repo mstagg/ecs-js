@@ -1,4 +1,4 @@
-import { DeterminateComponent } from "../../component";
+import { DeterminateComponent } from "../../Component";
 import { Entity } from "..";
 
 class ComponentA extends DeterminateComponent<"ComponentA"> {}

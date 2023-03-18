@@ -1,4 +1,4 @@
-import { DeterminateComponent } from "../component"
+import { DeterminateComponent } from "../Component"
 import { EntityTree } from "./types"
 
 export class Entity <T extends DeterminateComponent<string>>{
