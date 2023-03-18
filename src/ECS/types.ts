@@ -1,0 +1,1 @@
+export type ECSResources = Record<string, any>
