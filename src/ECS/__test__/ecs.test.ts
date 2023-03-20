@@ -1,8 +1,9 @@
 import { ECS } from '..';
 import { DeterminateComponent } from '../../Component';
-import { Entity } from '../../entity';
 
 class ComponentA extends DeterminateComponent<'ComponentA'> {}
+class ComponentB extends DeterminateComponent<'ComponentB'> {}
+class ComponentC extends DeterminateComponent<'ComponentC'> {}
 
 describe('ECS', () => {
     describe('constructor', () => {
@@ -14,52 +15,58 @@ describe('ECS', () => {
     });
 
     describe('addEntity', () => {
-        it('should add an entity', () => {
+        it('should add an entity with zero components', () => {
             const ecs = new ECS({});
-            const entity = new Entity<ComponentA>();
-            const component = new ComponentA();
+            const entity = ecs.addEntity();
 
-            entity.addComponent(component);
-            ecs.addEntity(entity);
-
-            expect(ecs.entities.size).toBe(1);
+            expect(entity.id).toBe(0);
+            expect(entity.componentsLength()).toBe(0);
+            expect(ecs.entities.get(0)).toBe(entity);
         });
 
-        it('should return an entity id', () => {
+        it('should add an entity with single component', () => {
             const ecs = new ECS({});
-            const entity = new Entity<ComponentA>();
             const component = new ComponentA();
+            const entity = ecs.addEntity(component);
 
-            entity.addComponent(component);
-            const entityId = ecs.addEntity(entity);
+            expect(entity.id).toBe(0);
+            expect(entity.componentsLength()).toBe(1);
+            expect(ecs.entities.get(0)).toBe(entity);
+        });
 
-            expect(entityId).toBe(0);
+        it('should add an entity with multiple components', () => {
+            const ecs = new ECS({});
+            const componentA = new ComponentA();
+            const componentB = new ComponentB();
+            const componentC = new ComponentC();
+            const entity = ecs.addEntity(componentA, componentB, componentC);
+
+            expect(entity.id).toBe(0);
+            expect(entity.componentsLength()).toBe(3);
+            expect(ecs.entities.get(0)).toBe(entity);
         });
     });
 
     describe('removeEntity', () => {
         it('should remove an entity', () => {
             const ecs = new ECS({});
-            const entity = new Entity<ComponentA>();
             const component = new ComponentA();
 
-            entity.addComponent(component);
-            const entityId = ecs.addEntity(entity);
-            ecs.removeEntity(entityId);
+            const entity = ecs.addEntity(component);
+            ecs.removeEntity(entity.id);
 
             expect(ecs.entities.size).toBe(0);
+            expect(ecs.entities.get(0)).toBeUndefined();
         });
     });
 
     describe('getEntity', () => {
         it('should get an entity', () => {
             const ecs = new ECS({});
-            const entity = new Entity<ComponentA>();
             const component = new ComponentA();
 
-            entity.addComponent(component);
-            const entityId = ecs.addEntity(entity);
-            const retrievedEntity = ecs.getEntity(entityId);
+            const entity = ecs.addEntity(component);
+            const retrievedEntity = ecs.getEntity(entity.id);
 
             expect(retrievedEntity).toStrictEqual(entity);
         });

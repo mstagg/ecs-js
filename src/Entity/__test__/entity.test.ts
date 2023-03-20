@@ -6,12 +6,19 @@ class ComponentB extends DeterminateComponent<'ComponentB'> {}
 class ComponentC extends DeterminateComponent<'ComponentC'> {}
 
 describe('Entity', () => {
+    describe('constructor', () => {
+        it('should create an entity with an id', () => {
+            const entity = new Entity<ComponentA>(1);
+            expect(entity.id).toBe(1);
+        });
+    });
+
     describe('componentsLength', () => {
         it('should return length equal to unique components in entity', () => {
             const component1 = new ComponentA();
             const component2 = new ComponentB();
             const component3 = new ComponentC();
-            const entity = new Entity<ComponentA | ComponentB | ComponentC>();
+            const entity = new Entity<ComponentA | ComponentB | ComponentC>(1);
 
             entity.addComponent(component1);
             entity.addComponent(component2);
@@ -23,7 +30,7 @@ describe('Entity', () => {
     describe('addComponent', () => {
         it('should add a component', () => {
             const component = new ComponentA();
-            const entity = new Entity<ComponentA>();
+            const entity = new Entity<ComponentA>(1);
             entity.addComponent(component);
             expect(entity.componentsLength()).toBe(1);
             expect(entity.getComponent(ComponentA)).toBe(component);
@@ -33,7 +40,7 @@ describe('Entity', () => {
             const component1 = new ComponentA();
             const component2 = new ComponentA();
             const component3 = new ComponentA();
-            const entity = new Entity<ComponentA>();
+            const entity = new Entity<ComponentA>(1);
             entity.addComponent(component1);
             entity.addComponent(component2);
             entity.addComponent(component3);
@@ -45,13 +52,13 @@ describe('Entity', () => {
     describe('getComponent', () => {
         it('should get a component when it exists', () => {
             const component = new ComponentA();
-            const entity = new Entity<ComponentA>();
+            const entity = new Entity<ComponentA>(1);
             entity.addComponent(component);
             expect(entity.getComponent(ComponentA)).toBe(component);
         });
 
         it('should return undefined when it does not exist', () => {
-            const entity = new Entity<ComponentA>();
+            const entity = new Entity<ComponentA>(1);
             expect(entity.getComponent(ComponentA)).toBe(undefined);
         });
     });
@@ -59,7 +66,7 @@ describe('Entity', () => {
     describe('removeComponent', () => {
         it('should remove a component when it exists', () => {
             const component = new ComponentA();
-            const entity = new Entity<ComponentA>();
+            const entity = new Entity<ComponentA>(1);
             entity.addComponent(component);
             entity.removeComponent(ComponentA);
             expect(entity.componentsLength()).toBe(0);
@@ -67,7 +74,7 @@ describe('Entity', () => {
         });
 
         it('should do nothing when it does not exist', () => {
-            const entity = new Entity<ComponentA>();
+            const entity = new Entity<ComponentA>(1);
             entity.removeComponent(ComponentA);
             expect(entity.componentsLength()).toBe(0);
             expect(entity.hasComponent(ComponentA)).toBe(false);
@@ -77,13 +84,13 @@ describe('Entity', () => {
     describe('hasComponent', () => {
         it('should return true when it exists', () => {
             const component = new ComponentA();
-            const entity = new Entity<ComponentA>();
+            const entity = new Entity<ComponentA>(1);
             entity.addComponent(component);
             expect(entity.hasComponent(ComponentA)).toBe(true);
         });
 
         it('should return false when it does not exist', () => {
-            const entity = new Entity<ComponentA>();
+            const entity = new Entity<ComponentA>(1);
             expect(entity.hasComponent(ComponentA)).toBe(false);
         });
     });
@@ -93,7 +100,7 @@ describe('Entity', () => {
             const component1 = new ComponentA();
             const component2 = new ComponentB();
             const component3 = new ComponentC();
-            const entity = new Entity<ComponentA | ComponentB | ComponentC>();
+            const entity = new Entity<ComponentA | ComponentB | ComponentC>(1);
             entity.addComponent(component1);
             entity.addComponent(component2);
             entity.addComponent(component3);
