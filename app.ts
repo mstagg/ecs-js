@@ -1,5 +1,5 @@
-import { DeterminateComponent } from './src/Component';
-import { Entity } from './src/entity';
+import { DeterminateComponent } from './dist/Component';
+import { Entity } from './dist/entity';
 
 class ComponentA extends DeterminateComponent<'ComponentA'> { }
 class ComponentB extends DeterminateComponent<'ComponentB'> { }

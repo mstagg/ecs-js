@@ -2,20 +2,28 @@
   "name": "ecs-js",
   "version": "0.0.0",
   "description": "ecs implementation for JS",
-  "main": "app.js",
   "scripts": {
     "test": "jest ./src",
     "lint": "eslint ./src --fix",
+    "prestart": "npm run build",
     "start": "ts-node app.ts",
     "prepare": "husky install",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "clean": "rm -rf ./dist",
+    "prebuild": "npm run lint && npm run clean",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mstagg/ecs-js.git"
   },
   "keywords": [
-    "ecs"
+    "ecs",
+    "entity",
+    "component",
+    "system",
+    "typescript",
+    "javascript"
   ],
   "author": "Matthew Stagg",
   "license": "ISC",
