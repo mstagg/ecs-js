@@ -1,9 +1,9 @@
 import { DeterminateComponent } from './dist/Component';
 import { ECS } from './dist/ECS';
-import { Entity } from './dist/Entity';
 import { SystemProcess } from './dist/System/types';
 
 class Edible extends DeterminateComponent<'Edible'> { }
+class Poisonous extends DeterminateComponent<'Poisonous'> { }
 class Fruit extends DeterminateComponent<'Fruit'> {
     name: string;
     constructor(name: string) {
@@ -60,7 +60,14 @@ const buyGroceries: SystemProcess<typeof state, Price> = (ecs, entities) => {
         ecs.resources.cost += price.price;
     });
 };
+const disposeOfPoison: SystemProcess<typeof state, Poisonous> = (ecs, entities) => {
+    console.log('Disposing of poison!');
+    entities.forEach(entity => {
+        ecs.removeEntity(entity.id);
+    });
+};
 
+ecs.addSystem(disposeOfPoison, [Poisonous]);
 ecs.addSystem(eatFruits, [Edible, Fruit]);
 ecs.addSystem(eatVeggies, [Edible, Vegetable]);
 ecs.addSystem(buyGroceries, [Price]);
@@ -73,6 +80,8 @@ ecs.addEntity(new Fruit('Holly Berry'), new Price(.2));
 
 ecs.addEntity(new Edible(), new Vegetable('Corn'), new Price(1));
 ecs.addEntity(new Edible(), new Vegetable('Lettuce'), new Price(.5));
+
+ecs.addEntity(new Poisonous(), new Fruit('Poison Apple'), new Edible());
 
 ecs.runSystems();
 console.log(`You ate ${ecs.resources.eatCount} items and spent ${ecs.resources.cost}`);
